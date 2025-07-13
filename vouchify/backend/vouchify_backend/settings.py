@@ -230,14 +230,21 @@ TEMPLATES = [
 ]
 
 # ─────────────────────────────────────────
-# Database (SQLite for dev)
+# Database (SQLite for dev, PostgreSQL for production)
 # ─────────────────────────────────────────
+import dj_database_url
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# Use PostgreSQL in production
+DATABASE_URL = config("DATABASE_URL", default=None)
+if DATABASE_URL:
+    DATABASES["default"] = dj_database_url.parse(DATABASE_URL)
 
 # ─────────────────────────────────────────
 # Custom user model
@@ -266,6 +273,13 @@ USE_TZ = True
 # Static files
 # ─────────────────────────────────────────
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Add whitenoise middleware for static files
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+# Enable whitenoise compression and caching
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ─────────────────────────────────────────
 # Default primary key field
@@ -305,9 +319,11 @@ SIMPLE_JWT = {
 }
 
 # ─────────────────────────────────────────
-# CORS (for React Vite dev server)
+# CORS (for React Vite dev server and production)
 # ─────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://vouchify-frontend.onrender.com",  # Add your frontend URL
+    "https://vouchify-backend.onrender.com",   # Add your backend URL
 ]
 CORS_ALLOW_CREDENTIALS = True
