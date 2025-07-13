@@ -133,8 +133,8 @@ import { WalletProvider } from "./Contexts/WalletContext";
 import { VoucherProvider } from "./Contexts/VoucherContext";
 
 /* Layout */
-import Navbar from "./Components/Navbar";
-import Footer from "./Components/Footer";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToHomeButton from "./components/BackToHomeButton";
 
