@@ -245,6 +245,12 @@ DATABASES = {
 DATABASE_URL = config("DATABASE_URL", default=None)
 if DATABASE_URL:
     DATABASES["default"] = dj_database_url.parse(DATABASE_URL)
+    # Ensure we're using the correct engine for PostgreSQL
+    DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql"
+    # Add connection options for better compatibility
+    DATABASES["default"]["OPTIONS"] = {
+        "sslmode": "require",
+    }
 
 # ─────────────────────────────────────────
 # Custom user model
